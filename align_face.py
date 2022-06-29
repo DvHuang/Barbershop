@@ -29,7 +29,8 @@ output_dir = Path(args.output_dir)
 output_dir.mkdir(parents=True,exist_ok=True)
 
 print("Downloading Shape Predictor")
-f=open_url("https://drive.google.com/uc?id=1huhv8PYpNNKbGCLOaYUjOgR1pY5pmbJx", cache_dir=cache_dir, return_path=True)
+#f=open_url("https://drive.google.com/uc?id=1huhv8PYpNNKbGCLOaYUjOgR1pY5pmbJx", cache_dir=cache_dir, return_path=True)
+f=open_url(f"file:///root/vdc/cv/Barbershop/cache_back/shape_predictor_68_face_landmarks.dat", cache_dir=cache_dir, return_path=True)
 predictor = dlib.shape_predictor(f)
 
 for im in Path(args.unprocessed_dir).glob("*.*"):
@@ -39,7 +40,8 @@ for im in Path(args.unprocessed_dir).glob("*.*"):
         if(args.output_size):
             factor = 1024//args.output_size
             assert args.output_size*factor == 1024
-            face_tensor = torchvision.transforms.ToTensor()(face).unsqueeze(0).cuda()
+            #face_tensor = torchvision.transforms.ToTensor()(face).unsqueeze(0).cuda()
+            face_tensor = torchvision.transforms.ToTensor()(face).unsqueeze(0)
             face_tensor_lr = face_tensor[0].cpu().detach().clamp(0, 1)
             face = torchvision.transforms.ToPILImage()(face_tensor_lr)
             if factor != 1:

@@ -29,7 +29,7 @@ def is_url(obj: Any) -> bool:
 
 def open_url(url: str, cache_dir: str = None, num_attempts: int = 10, verbose: bool = True, return_path: bool = False) -> Any:
     """Download the given URL and return a binary-mode file object to access the data."""
-    assert is_url(url)
+    #assert is_url(url)
     assert num_attempts >= 1
 
     # Lookup from cache.
@@ -45,7 +45,12 @@ def open_url(url: str, cache_dir: str = None, num_attempts: int = 10, verbose: b
     # Download.
     url_name = None
     url_data = None
+    local_file = True
     with requests.Session() as session:
+        if local_file:
+            print("load local file")
+            from requests_file import FileAdapter
+            session.mount("file://", FileAdapter())
         if verbose:
             print("Downloading %s ..." % url, end="", flush=True)
         for attempts_left in reversed(range(num_attempts)):
