@@ -96,6 +96,8 @@ class DistModel(BaseModel):
             self.net.eval()
 
         if(use_gpu):
+            print ("cuda count = {} , cuda info {}".format(torch.cuda.device_count(), torch.cuda.get_device_name()))
+            print ("gpu_ids:",gpu_ids[0])
             self.net.to(gpu_ids[0])
             self.net = torch.nn.DataParallel(self.net, device_ids=gpu_ids)
             if(self.is_train):
